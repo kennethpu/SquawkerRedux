@@ -13,8 +13,8 @@ class TweetsViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     var refreshControl: UIRefreshControl!
     
-    var tweets: [Tweet]!
-    var replyTweet: Tweet?
+    private var tweets: [Tweet]!
+    private var replyTweet: Tweet?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,16 +32,16 @@ class TweetsViewController: UIViewController {
         fetchData()
     }
     
-    func fetchData() {
+    func refresh(sender: AnyObject) {
+        fetchData()
+        self.refreshControl.endRefreshing()
+    }
+    
+    private func fetchData() {
         TwitterClient.sharedInstance.homeTimelineWithCompletion(nil, completion: { (tweets: [Tweet]?, error: NSError?) -> () in
             self.tweets = tweets
             self.tableView.reloadData()
         })
-    }
-    
-    func refresh(sender: AnyObject) {
-        fetchData()
-        self.refreshControl.endRefreshing()
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {

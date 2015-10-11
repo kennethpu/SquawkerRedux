@@ -19,15 +19,15 @@ let defaultColor: UIColor = UIColor(red: 102.0/255, green: 117.0/255, blue: 127.
 
 class TweetsTableViewCell: UITableViewCell {
 
-    @IBOutlet weak var profileImageView: UIImageView!
-    @IBOutlet weak var fullNameLabel: UILabel!
-    @IBOutlet weak var usernameLabel: UILabel!
-    @IBOutlet weak var timestampLabel: UILabel!
-    @IBOutlet weak var tweetTextLabel: UILabel!
-    @IBOutlet weak var retweetButton: UIButton!
-    @IBOutlet weak var retweetCountLabel: UILabel!
-    @IBOutlet weak var favoriteButton: UIButton!
-    @IBOutlet weak var favoriteCountLabel: UILabel!
+    @IBOutlet weak private var profileImageView: UIImageView!
+    @IBOutlet weak private var fullNameLabel: UILabel!
+    @IBOutlet weak private var usernameLabel: UILabel!
+    @IBOutlet weak private var timestampLabel: UILabel!
+    @IBOutlet weak private var tweetTextLabel: UILabel!
+    @IBOutlet weak private var retweetButton: UIButton!
+    @IBOutlet weak private var retweetCountLabel: UILabel!
+    @IBOutlet weak private var favoriteButton: UIButton!
+    @IBOutlet weak private var favoriteCountLabel: UILabel!
     
     var delegate: TweetsTableViewCellDelegate?
     
@@ -63,7 +63,7 @@ class TweetsTableViewCell: UITableViewCell {
         profileImageView.clipsToBounds = true
     }
     
-    func formatTimeElapsed(sinceDate: NSDate) -> String {
+    private func formatTimeElapsed(sinceDate: NSDate) -> String {
         let formatter = NSDateComponentsFormatter()
         formatter.unitsStyle = NSDateComponentsFormatterUnitsStyle.Abbreviated
         formatter.collapsesLargestUnit = true
@@ -99,7 +99,7 @@ class TweetsTableViewCell: UITableViewCell {
         }
     }
     
-    func favoriteTweet(idString: String!) {
+    private func favoriteTweet(idString: String!) {
         let params : NSDictionary = ["id": idString]
         TwitterClient.sharedInstance.favoriteTweetWithCompletion(params, completion: { (tweet: Tweet?, error: NSError?) -> () in
             if tweet != nil {
@@ -109,7 +109,7 @@ class TweetsTableViewCell: UITableViewCell {
         })
     }
     
-    func unfavoriteTweet(idString: String!) {
+    private func unfavoriteTweet(idString: String!) {
         let params : NSDictionary = ["id": idString]
         TwitterClient.sharedInstance.unfavoriteTweetWithCompletion(params, completion: { (tweet: Tweet?, error: NSError?) -> () in
             if tweet != nil {

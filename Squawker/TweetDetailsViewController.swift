@@ -66,7 +66,7 @@ class TweetDetailsViewController: UIViewController {
         favoriteButton.selected = tweet.favorited!
     }
     
-    func formatTimestamp(date: NSDate) -> String {
+    private func formatTimestamp(date: NSDate) -> String {
         let formatter = NSDateFormatter()
         formatter.dateFormat = "h:mm a - d MMM y"
         return formatter.stringFromDate(date)
@@ -98,7 +98,7 @@ class TweetDetailsViewController: UIViewController {
         }
     }
     
-    func favoriteTweet(idString: String!) {
+    private func favoriteTweet(idString: String!) {
         let params : NSDictionary = ["id": idString]
         TwitterClient.sharedInstance.favoriteTweetWithCompletion(params, completion: { (tweet: Tweet?, error: NSError?) -> () in
             if tweet != nil {
@@ -109,7 +109,7 @@ class TweetDetailsViewController: UIViewController {
         })
     }
     
-    func unfavoriteTweet(idString: String!) {
+    private func unfavoriteTweet(idString: String!) {
         let params : NSDictionary = ["id": idString]
         TwitterClient.sharedInstance.unfavoriteTweetWithCompletion(params, completion: { (tweet: Tweet?, error: NSError?) -> () in
             if tweet != nil {

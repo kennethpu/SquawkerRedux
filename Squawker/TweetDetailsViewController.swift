@@ -22,6 +22,9 @@ class TweetDetailsViewController: UIViewController {
     @IBOutlet private weak var fullNameLabel: UILabel!
     @IBOutlet private weak var usernameLabel: UILabel!
     @IBOutlet private weak var tweetTextLabel: UILabel!
+    @IBOutlet private weak var mediaView: UIView!
+    @IBOutlet private weak var mediaViewHeightConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var mediaImageView: UIImageView!
     @IBOutlet private weak var timeStampLabel: UILabel!
     @IBOutlet private weak var retweetCountLabel: UILabel!
     @IBOutlet private weak var retweetsLabel: UILabel!
@@ -39,6 +42,10 @@ class TweetDetailsViewController: UIViewController {
         
         profileImageView.layer.cornerRadius = 3
         profileImageView.clipsToBounds = true
+        
+        mediaImageView.layer.cornerRadius = 5
+        mediaImageView.contentMode = UIViewContentMode.ScaleAspectFill
+        mediaImageView.clipsToBounds = true
         
         updateUI()
     }
@@ -66,10 +73,28 @@ class TweetDetailsViewController: UIViewController {
                     weakIV!.alpha = 1.0
                 }
             }
-            }, failure: nil)
+        }, failure: nil)
         fullNameLabel.text = sourceTweet.author?.name
         usernameLabel.text = "@\(sourceTweet.author!.screenName!)"
         tweetTextLabel.text = sourceTweet.text
+        
+        if sourceTweet.mediaURL != nil {
+            let request = NSURLRequest(URL: (sourceTweet.mediaURL)!)
+            weak var weakIV = mediaImageView
+            mediaImageView.setImageWithURLRequest(request, placeholderImage: nil, success: { (request, response, image) -> Void in
+                weakIV!.image = image
+                if (response != nil && response!.statusCode != 0) {
+                    weakIV!.alpha = 0.0
+                    UIView.animateWithDuration(0.5) {
+                        weakIV!.alpha = 1.0
+                    }
+                }
+            }, failure: nil)
+        } else {
+            mediaView.hidden = true
+            mediaViewHeightConstraint.constant = 8
+        }
+        
         timeStampLabel.text = self.formatTimestamp(sourceTweet.createdAt!)
         let retweetCount = sourceTweet.retweetCount!
         retweetCountLabel.text = "\(retweetCount)"

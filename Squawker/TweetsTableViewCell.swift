@@ -27,6 +27,9 @@ class TweetsTableViewCell: UITableViewCell {
     @IBOutlet private weak var usernameLabel: UILabel!
     @IBOutlet private weak var timestampLabel: UILabel!
     @IBOutlet private weak var tweetTextLabel: UILabel!
+    @IBOutlet private weak var mediaView: UIView!
+    @IBOutlet private weak var mediaViewHeightConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var mediaImageView: UIImageView!
     @IBOutlet private weak var retweetButton: UIButton!
     @IBOutlet private weak var retweetCountLabel: UILabel!
     @IBOutlet private weak var favoriteButton: UIButton!
@@ -59,10 +62,31 @@ class TweetsTableViewCell: UITableViewCell {
                     }
                 }
             }, failure: nil)
+            
             fullNameLabel.text = sourceTweet.author?.name
             usernameLabel.text = "@\(sourceTweet.author!.screenName!)"
             timestampLabel.text = self.formatTimeElapsed(sourceTweet.createdAt!)
             tweetTextLabel.text = sourceTweet.text
+            
+            if sourceTweet.mediaURL != nil {
+                mediaView.hidden = false
+                mediaViewHeightConstraint.constant = 166
+                let request = NSURLRequest(URL: (sourceTweet.mediaURL)!)
+                weak var weakIV = mediaImageView
+                mediaImageView.setImageWithURLRequest(request, placeholderImage: nil, success: { (request, response, image) -> Void in
+                    weakIV!.image = image
+                    if (response != nil && response!.statusCode != 0) {
+                        weakIV!.alpha = 0.0
+                        UIView.animateWithDuration(0.5) {
+                            weakIV!.alpha = 1.0
+                        }
+                    }
+                }, failure: nil)
+            } else {
+                mediaView.hidden = true
+                mediaViewHeightConstraint.constant = 8
+            }
+            
             retweetButton.selected = sourceTweet.retweeted!
             retweetCountLabel.text = "\(sourceTweet.retweetCount!)"
             retweetCountLabel.textColor = retweetButton.selected ? retweetedColor : defaultColor
@@ -76,6 +100,19 @@ class TweetsTableViewCell: UITableViewCell {
         super.awakeFromNib()
         profileImageView.layer.cornerRadius = 3
         profileImageView.clipsToBounds = true
+        
+        mediaImageView.layer.cornerRadius = 5
+        mediaImageView.contentMode = UIViewContentMode.ScaleAspectFill
+        mediaImageView.clipsToBounds = true
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        profileImageView.cancelImageRequestOperation()
+        profileImageView.image = nil
+        
+        mediaImageView.cancelImageRequestOperation()
+        mediaImageView.image = nil
     }
     
     private func formatTimeElapsed(sinceDate: NSDate) -> String {

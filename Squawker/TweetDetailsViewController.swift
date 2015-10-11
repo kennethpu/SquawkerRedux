@@ -15,17 +15,20 @@ protocol TweetDetailsViewControllerDelegate {
 
 class TweetDetailsViewController: UIViewController {
 
-    @IBOutlet weak var profileImageView: UIImageView!
-    @IBOutlet weak var fullNameLabel: UILabel!
-    @IBOutlet weak var usernameLabel: UILabel!
-    @IBOutlet weak var tweetTextLabel: UILabel!
-    @IBOutlet weak var timeStampLabel: UILabel!
-    @IBOutlet weak var retweetCountLabel: UILabel!
-    @IBOutlet weak var retweetsLabel: UILabel!
-    @IBOutlet weak var favoriteCountLabel: UILabel!
-    @IBOutlet weak var favoritesLabel: UILabel!
-    @IBOutlet weak var retweetButton: UIButton!
-    @IBOutlet weak var favoriteButton: UIButton!
+    @IBOutlet private weak var retweetedView: UIView!
+    @IBOutlet private weak var retweetedViewHeightConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var retweetedLabel: UILabel!
+    @IBOutlet private weak var profileImageView: UIImageView!
+    @IBOutlet private weak var fullNameLabel: UILabel!
+    @IBOutlet private weak var usernameLabel: UILabel!
+    @IBOutlet private weak var tweetTextLabel: UILabel!
+    @IBOutlet private weak var timeStampLabel: UILabel!
+    @IBOutlet private weak var retweetCountLabel: UILabel!
+    @IBOutlet private weak var retweetsLabel: UILabel!
+    @IBOutlet private weak var favoriteCountLabel: UILabel!
+    @IBOutlet private weak var favoritesLabel: UILabel!
+    @IBOutlet private weak var retweetButton: UIButton!
+    @IBOutlet private weak var favoriteButton: UIButton!
     
     var tweet: Tweet!
     var index: Int!
@@ -40,8 +43,20 @@ class TweetDetailsViewController: UIViewController {
         updateUI()
     }
     
-    func updateUI() {
-        let request = NSURLRequest(URL: (tweet.author?.profileImageURL)!)
+    private func updateUI() {
+        let isRetweet = tweet.retweetedStatus != nil
+        let sourceTweet = isRetweet ? tweet.retweetedStatus : tweet
+        
+        if isRetweet {
+            retweetedView.hidden = false
+            retweetedViewHeightConstraint.constant = 40
+            retweetedLabel.text = "\(tweet.author!.name!) Retweeted"
+        } else {
+            retweetedView.hidden = true
+            retweetedViewHeightConstraint.constant = 20
+        }
+    
+        let request = NSURLRequest(URL: (sourceTweet.author?.profileImageURL)!)
         weak var weakIV = profileImageView
         profileImageView.setImageWithURLRequest(request, placeholderImage: nil, success: { (request, response, image) -> Void in
             weakIV!.image = image
@@ -52,18 +67,18 @@ class TweetDetailsViewController: UIViewController {
                 }
             }
             }, failure: nil)
-        fullNameLabel.text = tweet.author?.name
-        usernameLabel.text = "@\(tweet.author!.screenName!)"
-        tweetTextLabel.text = tweet.text
-        timeStampLabel.text = self.formatTimestamp(tweet.createdAt!)
-        let retweetCount = tweet.retweetCount!
+        fullNameLabel.text = sourceTweet.author?.name
+        usernameLabel.text = "@\(sourceTweet.author!.screenName!)"
+        tweetTextLabel.text = sourceTweet.text
+        timeStampLabel.text = self.formatTimestamp(sourceTweet.createdAt!)
+        let retweetCount = sourceTweet.retweetCount!
         retweetCountLabel.text = "\(retweetCount)"
         retweetsLabel.text = retweetCount == 1 ? "RETWEET" : "RETWEETS"
-        let favoriteCount = tweet.favoriteCount!
+        let favoriteCount = sourceTweet.favoriteCount!
         favoriteCountLabel.text = "\(favoriteCount)"
         favoritesLabel.text = favoriteCount == 1 ? "FAVORITE" : "FAVORITES"
-        retweetButton.selected = tweet.retweeted!
-        favoriteButton.selected = tweet.favorited!
+        retweetButton.selected = sourceTweet.retweeted!
+        favoriteButton.selected = sourceTweet.favorited!
     }
     
     private func formatTimestamp(date: NSDate) -> String {

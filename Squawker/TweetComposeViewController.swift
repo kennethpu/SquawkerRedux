@@ -14,12 +14,12 @@ protocol TweetComposeViewControllerDelegate {
 
 class TweetComposeViewController: UIViewController {
 
-    @IBOutlet weak var profileImageView: UIImageView!
-    @IBOutlet weak var fullNameLabel: UILabel!
-    @IBOutlet weak var usernameLabel: UILabel!
-    @IBOutlet weak var textView: UITextView!
-    @IBOutlet weak var characterLimitLabel: UILabel!
-    @IBOutlet weak var tweetButton: UIButton!
+    @IBOutlet private weak var profileImageView: UIImageView!
+    @IBOutlet private weak var fullNameLabel: UILabel!
+    @IBOutlet private weak var usernameLabel: UILabel!
+    @IBOutlet private weak var textView: UITextView!
+    @IBOutlet private weak var characterLimitLabel: UILabel!
+    @IBOutlet private weak var tweetButton: UIButton!
     
     var replyTweet: Tweet?
     var delegate: TweetComposeViewControllerDelegate?

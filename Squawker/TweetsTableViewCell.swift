@@ -19,21 +19,36 @@ let defaultColor: UIColor = UIColor(red: 102.0/255, green: 117.0/255, blue: 127.
 
 class TweetsTableViewCell: UITableViewCell {
 
-    @IBOutlet weak private var profileImageView: UIImageView!
-    @IBOutlet weak private var fullNameLabel: UILabel!
-    @IBOutlet weak private var usernameLabel: UILabel!
-    @IBOutlet weak private var timestampLabel: UILabel!
-    @IBOutlet weak private var tweetTextLabel: UILabel!
-    @IBOutlet weak private var retweetButton: UIButton!
-    @IBOutlet weak private var retweetCountLabel: UILabel!
-    @IBOutlet weak private var favoriteButton: UIButton!
-    @IBOutlet weak private var favoriteCountLabel: UILabel!
+    @IBOutlet private weak var retweetedView: UIView!
+    @IBOutlet private weak var retweetedViewHeightConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var retweetedLabel: UILabel!
+    @IBOutlet private weak var profileImageView: UIImageView!
+    @IBOutlet private weak var fullNameLabel: UILabel!
+    @IBOutlet private weak var usernameLabel: UILabel!
+    @IBOutlet private weak var timestampLabel: UILabel!
+    @IBOutlet private weak var tweetTextLabel: UILabel!
+    @IBOutlet private weak var retweetButton: UIButton!
+    @IBOutlet private weak var retweetCountLabel: UILabel!
+    @IBOutlet private weak var favoriteButton: UIButton!
+    @IBOutlet private weak var favoriteCountLabel: UILabel!
     
     var delegate: TweetsTableViewCellDelegate?
     
     var tweet: Tweet! {
         didSet {
-            let request = NSURLRequest(URL: (tweet.author?.profileImageURL)!)
+            let isRetweet = tweet.retweetedStatus != nil
+            let sourceTweet = isRetweet ? tweet.retweetedStatus : tweet
+            
+            if isRetweet {
+                retweetedView.hidden = false
+                retweetedViewHeightConstraint.constant = 30
+                retweetedLabel.text = "\(tweet.author!.name!) Retweeted"
+            } else {
+                retweetedView.hidden = true
+                retweetedViewHeightConstraint.constant = 8
+            }
+            
+            let request = NSURLRequest(URL: (sourceTweet.author?.profileImageURL)!)
             weak var weakIV = profileImageView
             profileImageView.setImageWithURLRequest(request, placeholderImage: nil, success: { (request, response, image) -> Void in
                 weakIV!.image = image
@@ -44,15 +59,15 @@ class TweetsTableViewCell: UITableViewCell {
                     }
                 }
             }, failure: nil)
-            fullNameLabel.text = tweet.author?.name
-            usernameLabel.text = "@\(tweet.author!.screenName!)"
-            timestampLabel.text = self.formatTimeElapsed(tweet.createdAt!)
-            tweetTextLabel.text = tweet.text
-            retweetButton.selected = tweet.retweeted!
-            retweetCountLabel.text = "\(tweet.retweetCount!)"
+            fullNameLabel.text = sourceTweet.author?.name
+            usernameLabel.text = "@\(sourceTweet.author!.screenName!)"
+            timestampLabel.text = self.formatTimeElapsed(sourceTweet.createdAt!)
+            tweetTextLabel.text = sourceTweet.text
+            retweetButton.selected = sourceTweet.retweeted!
+            retweetCountLabel.text = "\(sourceTweet.retweetCount!)"
             retweetCountLabel.textColor = retweetButton.selected ? retweetedColor : defaultColor
-            favoriteButton.selected = tweet.favorited!
-            favoriteCountLabel.text = "\(tweet.favoriteCount!)"
+            favoriteButton.selected = sourceTweet.favorited!
+            favoriteCountLabel.text = "\(sourceTweet.favoriteCount!)"
             favoriteCountLabel.textColor = favoriteButton.selected ? favoritedColor : defaultColor
         }
     }

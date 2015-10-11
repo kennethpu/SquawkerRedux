@@ -18,6 +18,7 @@ class Tweet: NSObject {
     var retweetCount: Int?
     var favorited: Bool?
     var favoriteCount: Int?
+    var retweetedStatus: Tweet?
     
     init(dictionary: NSDictionary) {
         self.dictionary = dictionary
@@ -33,6 +34,9 @@ class Tweet: NSObject {
         retweetCount = dictionary["retweet_count"] as? Int
         favorited = dictionary["favorited"] as? Bool
         favoriteCount = dictionary["favorite_count"] as? Int
+        if let retweetDict = dictionary["retweeted_status"] as? NSDictionary {
+            retweetedStatus = Tweet(dictionary: retweetDict)
+        }
     }
     
     class func tweetsWithArray(array: [NSDictionary]) -> [Tweet] {

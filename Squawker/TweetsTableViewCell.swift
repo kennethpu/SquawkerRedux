@@ -10,7 +10,8 @@ import UIKit
 
 protocol TweetsTableViewCellDelegate {
     func handleTweetUpdatedForCell(tweet: Tweet, cell: TweetsTableViewCell)
-    func callSegueFromCell(tweet: Tweet)
+    func callComposeSegueFromCell(tweet: Tweet)
+    func callUserSegueFromCell(user: User)
 }
 
 let retweetedColor: UIColor = UIColor(red: 102.0/255, green: 167.0/255, blue: 68.0/255, alpha: 1.0)
@@ -37,10 +38,12 @@ class TweetsTableViewCell: UITableViewCell {
     
     var delegate: TweetsTableViewCellDelegate?
     
+    private var sourceTweet: Tweet!
+    
     var tweet: Tweet! {
         didSet {
             let isRetweet = tweet.retweetedStatus != nil
-            let sourceTweet = isRetweet ? tweet.retweetedStatus : tweet
+            sourceTweet = isRetweet ? tweet.retweetedStatus : tweet
             
             if isRetweet {
                 retweetedView.hidden = false
@@ -100,6 +103,8 @@ class TweetsTableViewCell: UITableViewCell {
         super.awakeFromNib()
         profileImageView.layer.cornerRadius = 3
         profileImageView.clipsToBounds = true
+        profileImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "profileImageTapped:"))
+        profileImageView.userInteractionEnabled = true
         
         mediaImageView.layer.cornerRadius = 5
         mediaImageView.contentMode = UIViewContentMode.ScaleAspectFill
@@ -125,7 +130,7 @@ class TweetsTableViewCell: UITableViewCell {
     }
     
     @IBAction func replyTapped(sender: AnyObject) {
-        self.delegate?.callSegueFromCell(tweet)
+        self.delegate?.callComposeSegueFromCell(tweet)
     }
     
     @IBAction func retweetTapped(sender: AnyObject) {
@@ -169,5 +174,9 @@ class TweetsTableViewCell: UITableViewCell {
                 self.delegate?.handleTweetUpdatedForCell(tweet!, cell: self)
             }
         })
+    }
+    
+    func profileImageTapped(gesture: UIGestureRecognizer!) {
+        self.delegate?.callUserSegueFromCell(sourceTweet.author!)
     }
 }

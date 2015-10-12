@@ -18,7 +18,11 @@ class User: NSObject {
     var name:String?
     var screenName: String?
     var profileImageURL: NSURL?
+    var profileBannerImageURL: NSURL?
     var tagLine: String?
+    var numTweets: Int?
+    var numFollowing: Int?
+    var numFollowers: Int?
     
     init(dictionary: NSDictionary) {
         self.dictionary = dictionary
@@ -29,7 +33,14 @@ class User: NSObject {
         if profileImageURLString != nil {
             profileImageURL = NSURL(string: profileImageURLString!.stringByReplacingOccurrencesOfString("_normal", withString: "_bigger"))
         }
+        let profileBannerImageURLString = dictionary["profile_banner_url"] as? String
+        if profileBannerImageURLString != nil {
+            profileBannerImageURL = NSURL(string: profileBannerImageURLString!)
+        }
         tagLine = dictionary["description"] as? String
+        numTweets = dictionary["statuses_count"] as? Int
+        numFollowing = dictionary["friends_count"] as? Int
+        numFollowers = dictionary["followers_count"] as? Int
     }
     
     func logout() {

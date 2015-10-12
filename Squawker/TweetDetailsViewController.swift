@@ -10,7 +10,8 @@ import UIKit
 
 protocol TweetDetailsViewControllerDelegate {
     func handleTweetUpdatedForViewController(tweet: Tweet, index: Int)
-    func callSegueFromViewController(tweet: Tweet)
+    func callComposeSegueFromViewController(tweet: Tweet)
+    func callUserSegueFromViewController(user: User)
 }
 
 class TweetDetailsViewController: UIViewController {
@@ -34,6 +35,7 @@ class TweetDetailsViewController: UIViewController {
     @IBOutlet private weak var favoriteButton: UIButton!
     
     var tweet: Tweet!
+    private var sourceTweet: Tweet!
     var index: Int!
     var delegate: TweetDetailsViewControllerDelegate?
     
@@ -52,7 +54,7 @@ class TweetDetailsViewController: UIViewController {
     
     private func updateUI() {
         let isRetweet = tweet.retweetedStatus != nil
-        let sourceTweet = isRetweet ? tweet.retweetedStatus : tweet
+        sourceTweet = isRetweet ? tweet.retweetedStatus : tweet
         
         if isRetweet {
             retweetedView.hidden = false
@@ -113,7 +115,7 @@ class TweetDetailsViewController: UIViewController {
     }
     
     @IBAction func replyTapped(sender: AnyObject) {
-        self.delegate?.callSegueFromViewController(tweet)
+        self.delegate?.callComposeSegueFromViewController(tweet)
     }
     
     @IBAction func retweetTapped(sender: AnyObject) {
@@ -159,4 +161,9 @@ class TweetDetailsViewController: UIViewController {
             }
         })
     }
+    
+    @IBAction func profileImageTapped(sender: AnyObject) {
+        self.delegate?.callUserSegueFromViewController(sourceTweet.author!)
+    }
+    
 }

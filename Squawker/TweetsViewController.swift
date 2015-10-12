@@ -15,6 +15,7 @@ class TweetsViewController: UIViewController {
     
     private var tweets: [Tweet]!
     private var replyTweet: Tweet?
+    private var targetUser: User?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,7 +46,7 @@ class TweetsViewController: UIViewController {
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "DetailSegue" {
+        if segue.identifier == "TweetDetailSegue" {
             let destinationVC = segue.destinationViewController as! TweetDetailsViewController
             let indexPath = tableView.indexPathForCell(sender as! UITableViewCell)!
             
@@ -60,6 +61,12 @@ class TweetsViewController: UIViewController {
                 replyTweet = nil
             }
             destinationVC.delegate = self
+        } else if segue.identifier == "UserDetailSegue" {
+            let destinationVC = segue.destinationViewController as! UserDetailsViewController
+            
+            if targetUser != nil {
+                destinationVC.user = targetUser
+            }
         }
     }
     
@@ -89,9 +96,14 @@ extension TweetsViewController: TweetsTableViewCellDelegate {
         tweets[indexPath.row] = tweet
     }
     
-    func callSegueFromCell(tweet: Tweet) {
+    func callComposeSegueFromCell(tweet: Tweet) {
         replyTweet = tweet
         self.performSegueWithIdentifier("NewTweetSegue", sender: self)
+    }
+    
+    func callUserSegueFromCell(user: User) {
+        targetUser = user
+        self.performSegueWithIdentifier("UserDetailSegue", sender: self)
     }
 }
 
@@ -101,9 +113,14 @@ extension TweetsViewController: TweetDetailsViewControllerDelegate {
         tableView.reloadData()
     }
     
-    func callSegueFromViewController(tweet: Tweet) {
+    func callComposeSegueFromViewController(tweet: Tweet) {
         replyTweet = tweet
         self.performSegueWithIdentifier("NewTweetSegue", sender: self)
+    }
+    
+    func callUserSegueFromViewController(user: User) {
+        targetUser = user
+        self.performSegueWithIdentifier("UserDetailSegue", sender: self)
     }
 }
 

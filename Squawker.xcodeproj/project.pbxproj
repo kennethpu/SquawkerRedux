@@ -14,6 +14,7 @@
 		BB2A8B191BC1C6C100D1A71D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BB2A8B181BC1C6C100D1A71D /* Main.storyboard */; settings = {ASSET_TAGS = (); }; };
 		BB2A8B1C1BC1D21400D1A71D /* TweetsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2A8B1B1BC1D21400D1A71D /* TweetsViewController.swift */; settings = {ASSET_TAGS = (); }; };
 		BB71CDC21BC213070008F0B6 /* TweetsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB71CDC11BC213070008F0B6 /* TweetsTableViewCell.swift */; settings = {ASSET_TAGS = (); }; };
+		BB79C8D01BCB05F9004B9DDF /* UserDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB79C8CF1BCB05F9004B9DDF /* UserDetailsViewController.swift */; settings = {ASSET_TAGS = (); }; };
 		BBE86BA11BC22BA400CDF856 /* TweetDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE86BA01BC22BA400CDF856 /* TweetDetailsViewController.swift */; settings = {ASSET_TAGS = (); }; };
 		BBE86BA31BC26EAD00CDF856 /* TweetComposeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBE86BA21BC26EAD00CDF856 /* TweetComposeViewController.swift */; settings = {ASSET_TAGS = (); }; };
 		BBEC75321BBE45B5008BE99A /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBEC75301BBE45B5008BE99A /* LoginViewController.swift */; settings = {ASSET_TAGS = (); }; };
@@ -35,6 +36,7 @@
 		BB2A8B181BC1C6C100D1A71D /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		BB2A8B1B1BC1D21400D1A71D /* TweetsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TweetsViewController.swift; sourceTree = "<group>"; };
 		BB71CDC11BC213070008F0B6 /* TweetsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TweetsTableViewCell.swift; sourceTree = "<group>"; };
+		BB79C8CF1BCB05F9004B9DDF /* UserDetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDetailsViewController.swift; sourceTree = "<group>"; };
 		BBE86BA01BC22BA400CDF856 /* TweetDetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TweetDetailsViewController.swift; sourceTree = "<group>"; };
 		BBE86BA21BC26EAD00CDF856 /* TweetComposeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TweetComposeViewController.swift; sourceTree = "<group>"; };
 		BBEC75301BBE45B5008BE99A /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -120,6 +122,7 @@
 				BB71CDC11BC213070008F0B6 /* TweetsTableViewCell.swift */,
 				BBE86BA01BC22BA400CDF856 /* TweetDetailsViewController.swift */,
 				BBE86BA21BC26EAD00CDF856 /* TweetComposeViewController.swift */,
+				BB79C8CF1BCB05F9004B9DDF /* UserDetailsViewController.swift */,
 				BBF6EAF91BBE423E007711F9 /* AppDelegate.swift */,
 				BBF6EB001BBE423E007711F9 /* Assets.xcassets */,
 				BB2A8B181BC1C6C100D1A71D /* Main.storyboard */,
@@ -261,6 +264,7 @@
 				BBEC75351BBE463E008BE99A /* TwitterClient.swift in Sources */,
 				BBE86BA31BC26EAD00CDF856 /* TweetComposeViewController.swift in Sources */,
 				BB2A8B1C1BC1D21400D1A71D /* TweetsViewController.swift in Sources */,
+				BB79C8D01BCB05F9004B9DDF /* UserDetailsViewController.swift in Sources */,
 				BB2A8B121BC0E5C300D1A71D /* APIKeys.swift in Sources */,
 				BBF6EAFA1BBE423E007711F9 /* AppDelegate.swift in Sources */,
 			);

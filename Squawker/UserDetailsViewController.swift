@@ -74,6 +74,8 @@ class UserDetailsViewController: UIViewController {
         numTweetsLabel.text = abbrevNumString(user.numTweets!)
         numFollowingLabel.text = abbrevNumString(user.numFollowing!)
         numFollowersLabel.text = abbrevNumString(user.numFollowers!)
+        
+        navigationItem.title = user.name!
     }
     
     private func abbrevNumString(int: Int) -> String {

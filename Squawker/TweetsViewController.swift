@@ -16,6 +16,17 @@ class TweetsViewController: UIViewController {
     private var tweets: [Tweet]!
     private var replyTweet: Tweet?
     private var targetUser: User?
+    private var oldMode: String?
+    
+    var mode: String = "Mentions" {
+        didSet {
+            if oldMode != mode {
+                navigationItem.title = mode
+                fetchData()
+                oldMode = mode
+            }
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,7 +34,7 @@ class TweetsViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.rowHeight = UITableViewAutomaticDimension
-        tableView.estimatedRowHeight = 110
+        tableView.estimatedRowHeight = 150
         
         refreshControl = UIRefreshControl()
         refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
@@ -39,10 +50,17 @@ class TweetsViewController: UIViewController {
     }
     
     private func fetchData() {
-        TwitterClient.sharedInstance.homeTimelineWithCompletion(nil, completion: { (tweets: [Tweet]?, error: NSError?) -> () in
-            self.tweets = tweets
-            self.tableView.reloadData()
-        })
+        if mode == "Home" {
+            TwitterClient.sharedInstance.homeTimelineWithCompletion(nil, completion: { (tweets: [Tweet]?, error: NSError?) -> () in
+                self.tweets = tweets
+                self.tableView.reloadData()
+            })
+        } else {
+            TwitterClient.sharedInstance.mentionsTimelineWithCompletion(nil, completion: { (tweets: [Tweet]?, error: NSError?) -> () in
+                self.tweets = tweets
+                self.tableView.reloadData()
+            })
+        }
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
